@@ -8,6 +8,10 @@
       "accent2": "#d6303a",
       "background": "#23072d",
       "muted": "#ffffff"
+    },
+    "article": {
+      "ru": "article_ru.html",
+      "en": "article_en.html"
     }
   },
   "parameters": {
