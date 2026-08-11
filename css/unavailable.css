@@ -1,0 +1,87 @@
+/* --- Страница-заглушка при ошибках --- */
+
+.unavailable-message {
+    margin: 80px auto;
+    max-width: 18em;
+    font-size: 42px;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.unavailable-message--glitch {
+    animation: unavailable-glitch 0.55s steps(2, end) 2;
+}
+
+@keyframes unavailable-glitch {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+        filter: none;
+        text-shadow: none;
+        clip-path: inset(0 0 0 0);
+    }
+    15% {
+        opacity: 0.45;
+        transform: translate(-5px, 1px);
+        filter: contrast(1.4) hue-rotate(80deg);
+        text-shadow:
+            2px 0 rgba(255, 0, 80, 0.8),
+            -2px 0 rgba(0, 255, 220, 0.7);
+        clip-path: inset(10% 0 58% 0);
+    }
+    35% {
+        opacity: 1;
+        transform: translate(4px, -2px);
+        filter: contrast(1.25) hue-rotate(-40deg);
+        text-shadow:
+            -3px 0 rgba(255, 0, 80, 0.65),
+            3px 0 rgba(0, 255, 220, 0.55);
+        clip-path: inset(42% 0 18% 0);
+    }
+    55% {
+        opacity: 0.65;
+        transform: translate(-3px, 0);
+        filter: contrast(1.35) hue-rotate(120deg);
+        text-shadow:
+            2px 0 rgba(255, 0, 80, 0.75),
+            -2px 0 rgba(0, 255, 220, 0.65);
+        clip-path: inset(0 0 0 0);
+    }
+    75% {
+        transform: translate(2px, 1px);
+        filter: contrast(1.2);
+        text-shadow:
+            1px 0 rgba(255, 0, 80, 0.4),
+            -1px 0 rgba(0, 255, 220, 0.35);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+        filter: none;
+        text-shadow: none;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@media (max-width: 900px) {
+    .unavailable-message {
+        margin: 48px auto;
+        font-size: 28px;
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 600px) {
+    .unavailable-message {
+        margin: 32px auto;
+        font-size: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .unavailable-message--glitch {
+        animation: none;
+    }
+}

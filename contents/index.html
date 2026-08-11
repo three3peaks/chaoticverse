@@ -6,6 +6,7 @@
     <title>Contents | CHAOTICVERSE</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/contents.css">
+    <link rel="stylesheet" href="../css/unavailable.css">
     <link rel="icon" href="../favicon.png" type="image/x-icon">
     <link rel="preload" as="image" href="../images/CHAOTICVERSE_1.webp">
 </head>
@@ -59,7 +60,8 @@
 
         <hr class="divider">
 
-        <div id="toc"></div>
+        <!-- Временно вместо оглавления: заглушка. Вернуть #toc + scripts.js когда страница снова доступна. -->
+        <p id="unavailableMessage" class="unavailable-message" aria-live="polite"></p>
 
         <div class="overlay-footer-text">
             © <span id="year"></span> SOLE PRODUCTION UT PROJECT
@@ -71,7 +73,7 @@
 <div class="restore-button" id="restore">+</div>
 <div id="backgroundHeight"></div>
 <script src="../background-resize.js" data-bg="../images/CHAOTICVERSE_1.webp"></script>
-    <script src="../lang-preference.js"></script>
-    <script src="scripts.js"></script>
+<script src="../lang-preference.js"></script>
+<script src="../unavailable/scripts.js"></script>
 </body>
 </html>

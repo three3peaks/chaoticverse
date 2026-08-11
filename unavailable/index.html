@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unavailable | CHAOTICVERSE</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/unavailable.css">
+    <link rel="icon" href="../favicon.png" type="image/x-icon">
+    <link rel="preload" as="image" href="../images/CHAOTICVERSE_1.webp">
+</head>
+<body>
+<div class="fixed-overlay" id="overlay">
+    <button class="minimize-button" id="minimize">–</button>
+    <button class="lang-toggle-button" id="langToggle">EN</button>
+    <div class="overlay-content-unavailable-page" id="textContent">
+        <div id="unavailableTitleSlot"></div>
+        <hr class="divider">
+        <div id="unavailableNavSlot" class="button-row"></div>
+        <hr class="divider">
+
+        <p id="unavailableMessage" class="unavailable-message" aria-live="polite"></p>
+
+        <div class="overlay-footer-text">
+            <p style="margin-top: 60px;">© <span id="year"></span> SOLE PRODUCTION UT PROJECT</p>
+        </div>
+    </div>
+</div>
+
+<div class="restore-button" id="restore">+</div>
+<div id="backgroundHeight"></div>
+<script src="../background-resize.js" data-bg="../images/CHAOTICVERSE_1.webp"></script>
+<script src="../lang-preference.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

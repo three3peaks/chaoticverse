@@ -232,7 +232,8 @@ hr.divider {
 .overlay-content-contents-page,
 .overlay-content-about-us-page,
 .overlay-content-progress-page,
-.overlay-content-artworks-page {
+.overlay-content-artworks-page,
+.overlay-content-unavailable-page {
     font-family: var(--font-determination);
     font-size: 26px;
     color: white;
@@ -493,7 +494,8 @@ hr.divider {
     .overlay-content-contents-page,
     .overlay-content-about-us-page,
     .overlay-content-progress-page,
-    .overlay-content-artworks-page {
+    .overlay-content-artworks-page,
+    .overlay-content-unavailable-page {
         font-size: 15px;
         padding: 12px 8px;
         line-height: 1.5;
