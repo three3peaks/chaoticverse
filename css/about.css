@@ -12,3 +12,64 @@
         max-width: 90%;
     }
 }
+
+.artists-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 24px 16px;
+    margin-top: 30px;
+    align-items: start;
+    width: 100%;
+}
+
+.artists-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+}
+
+.artists-column-title {
+    margin: 0 0 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.artists-column-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+}
+
+.artists-column-list .person-group-card {
+    width: auto;
+    max-width: 100%;
+}
+
+.artists-column-list .person-group-name {
+    white-space: normal;
+    word-break: break-word;
+}
+
+@media (max-width: 900px) {
+    .artists-columns {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    }
+
+    .artists-column-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .artists-column-title {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+
+    .artists-column-list {
+        gap: 24px;
+    }
+}
