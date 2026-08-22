@@ -97,9 +97,40 @@ function renderPeople(scriptersContainer, editorsContainer, artistsContainer, pa
 
     renderGroup(peopleData.scripters, scriptersContainer);
     renderGroup(peopleData.editors, editorsContainer);
-    renderGroup(peopleData.artists, artistsContainer);
+    renderArtists(peopleData.artists, artistsContainer);
     renderGroup(peopleData.partners, partnersContainer);
     renderGroup(peopleData.exparticipants, exParticipantsContainer);
+}
+
+const ARTIST_TYPE_COLUMNS = [
+    { type: "all", ru: "Универсальные", en: "All-round" },
+    { type: "comic", ru: "Иллюстраторы", en: "Illustrators" },
+    { type: "orig", ru: "Авторские", en: "Original" },
+    { type: "extra", ru: "Специфические", en: "Specific" }
+];
+
+function renderArtists(artists, container) {
+    const lang = currentLang.toLowerCase();
+
+    ARTIST_TYPE_COLUMNS.forEach(col => {
+        const people = artists.filter(person => person.type === col.type);
+        if (people.length === 0) return;
+
+        const column = document.createElement("div");
+        column.className = "artists-column";
+
+        const title = document.createElement("h3");
+        title.className = "artists-column-title";
+        title.textContent = lang === "ru" ? col.ru : col.en;
+        column.appendChild(title);
+
+        const list = document.createElement("div");
+        list.className = "artists-column-list";
+        renderGroup(people, list);
+        column.appendChild(list);
+
+        container.appendChild(column);
+    });
 }
 
 /** Avatars: images/people/ plus filename (one shared folder for all roles). */

@@ -17,6 +17,11 @@
     "alt": {
       "type": "string"
     },
+    "type": {
+      "type": "string",
+      "enum": ["all", "comic", "orig", "extra"],
+      "description": "Artist specialization for About Us columns: all (All-round), comic (Illustrators), orig (Original), extra (Specific). Used on artists.json only."
+    },
     "link": {
       "type": "string",
       "description": "Shared external URL (https://…). Used for all languages unless overridden in en.link or ru.link."

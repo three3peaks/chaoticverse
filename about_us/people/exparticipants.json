@@ -2,6 +2,18 @@
   "$schema": "./people-role.schema.json",
   "people": [
     {
+      "id": "tok",
+      "image": "tok.webp",
+      "alt": "tok",
+      "link": "https://vk.com/tok_1",
+      "en": {
+        "name": "Т.О.К"
+      },
+      "ru": {
+        "name": "Т.О.К"
+      }
+    },
+    {
       "id": "arkashka",
       "image": "arkashka.webp",
       "alt": "arkashka",

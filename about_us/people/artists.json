@@ -3,6 +3,7 @@
   "people": [
     {
       "id": "asun",
+      "type": "all",
       "image": "A-Sun.webp",
       "alt": "a-sun",
       "link": "https://vk.com/a_sun_comix",
@@ -14,19 +15,8 @@
       }
     },
     {
-      "id": "tok",
-      "image": "tok.webp",
-      "alt": "tok",
-      "link": "https://vk.com/tok_1",
-      "en": {
-        "name": "Т.О.К"
-      },
-      "ru": {
-        "name": "Т.О.К"
-      }
-    },
-    {
       "id": "paws",
+      "type": "all",
       "image": "paws.webp",
       "alt": "paws",
       "link": "https://vk.com/club223254276",
@@ -39,6 +29,7 @@
     },
     {
       "id": "sorenpo",
+      "type": "orig",
       "image": "Sorenpo.webp",
       "alt": "sorenpo",
       "link": "https://vk.com/soren_po",
@@ -51,6 +42,7 @@
     },
     {
       "id": "maria",
+      "type": "all",
       "image": "Maria Reidman.webp",
       "alt": "maria",
       "link": "https://vk.com/id614033191",
@@ -63,6 +55,7 @@
     },
     {
       "id": "unknown_team",
+      "type": "extra",
       "image": "BPCN Studio.webp",
       "alt": "unknown team",
       "link": "https://vk.com/forgottenandunknownman",
@@ -75,6 +68,7 @@
     },
     {
       "id": "pnonytale",
+      "type": "all",
       "image": "PnonyTale.webp",
       "alt": "pnonytale",
       "link": "https://vk.com/club229553141",
@@ -87,6 +81,7 @@
     },
     {
       "id": "grass",
+      "type": "extra",
       "image": "Caustic Grass.webp",
       "alt": "grass",
       "link": "https://vk.com/causticgrassmaingroup",
@@ -99,6 +94,7 @@
     },
     {
       "id": "meta_kaj",
+      "type": "orig",
       "image": "meta_kaj.webp",
       "alt": "meta_kaj",
       "link": "https://www.instagram.com/meta_kaj/",
@@ -111,6 +107,7 @@
     },
     {
       "id": "anti",
+      "type": "orig",
       "image": "anti.webp",
       "alt": "anti",
       "link": "https://vk.com/anti_undertale_artist",
@@ -123,6 +120,7 @@
     },
     {
       "id": "husky",
+      "type": "orig",
       "image": "hell_husky.webp",
       "alt": "husky",
       "link": "https://vk.com/6husky6hell6",
@@ -135,6 +133,7 @@
     },
     {
       "id": "limelag",
+      "type": "all",
       "image": "limelag.webp",
       "alt": "limelag",
       "link": "https://vk.ru/limelag",
@@ -147,6 +146,7 @@
     },
     {
       "id": "antifffff",
+      "type": "orig",
       "image": "antifffff.webp",
       "alt": "antifffff",
       "en": {
