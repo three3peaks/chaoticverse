@@ -80,34 +80,55 @@ async function loadJSON(path) {
 }
 
 async function loadArticle(path) {
-    const res = await fetch(path);
-    if (!res.ok) throw new Error(`Article load failed ${res.status}: ${res.url}`);
-    return res.text();
+    try {
+        const res = await fetch(path);
+        if (!res.ok) {
+            console.warn(`Article not found (${res.status}): ${res.url}`);
+            return '';
+        }
+        return res.text();
+    } catch (err) {
+        console.warn(`Article load failed: ${path}`, err);
+        return '';
+    }
 }
 
 /* ================== CHARACTER LOADING (cached) ================== */
+const CharacterPage = window.CharacterPage || {};
+let activeInfoPath = CharacterPage.infoPath || './info.json';
+
 let chrSchema = null;
 let infoData = null;
 let characterArticle = { ru: '', en: '' };
 
 let loadPromise = null;
 
+async function ensureSchema() {
+    if (!chrSchema) {
+        chrSchema = await loadJSON('../chr_prms.json');
+    }
+    return chrSchema;
+}
+
+/** Загрузка info.json (+ статьи). path — опционально, для страниц с несколькими персонажами. */
+async function loadCharacterInfo(infoPath) {
+    if (infoPath) activeInfoPath = infoPath;
+    await ensureSchema();
+    const info = await loadJSON(activeInfoPath);
+    infoData = info;
+    characterHeaderEN = info.data.en_name;
+    characterHeaderRU = info.data.ru_name;
+    characterArticle = { ru: '', en: '' };
+    const art = info.data.article;
+    if (art?.ru) characterArticle.ru = await loadArticle(art.ru);
+    if (art?.en) characterArticle.en = await loadArticle(art.en);
+    loadPromise = Promise.resolve();
+    return info;
+}
+
 function ensureCharacterData() {
     if (!loadPromise) {
-        loadPromise = (async () => {
-            const [schema, info] = await Promise.all([
-                loadJSON('../chr_prms.json'),
-                loadJSON('./info.json')
-            ]);
-            chrSchema = schema;
-            infoData = info;
-            characterHeaderEN = info.data.en_name;
-            characterHeaderRU = info.data.ru_name;
-
-            const art = info.data.article;
-            if (art?.ru) characterArticle.ru = await loadArticle(art.ru);
-            if (art?.en) characterArticle.en = await loadArticle(art.en);
-        })();
+        loadPromise = loadCharacterInfo(activeInfoPath);
     }
     return loadPromise;
 }
@@ -321,16 +342,23 @@ async function renderArticle(lang = 'ru') {
 
 /* ================== NORMALIZATION ================== */
 function normalizeValueBars(section) {
-    const bars = section.querySelectorAll('.value-bar');
-    let minWidth = Infinity;
+    const bars = [...section.querySelectorAll('.value-bar')];
+    if (!bars.length) return;
 
-    bars.forEach(bar => {
-        const w = bar.getBoundingClientRect().width;
-        if (w < minWidth) minWidth = w;
-    });
+    requestAnimationFrame(() => {
+        let minWidth = Infinity;
+        for (const bar of bars) {
+            const w = bar.getBoundingClientRect().width;
+            if (w < minWidth) minWidth = w;
+        }
+        if (!Number.isFinite(minWidth)) return;
 
-    bars.forEach(bar => {
-        bar.style.width = `${minWidth}px`;
+        requestAnimationFrame(() => {
+            const widthPx = `${minWidth}px`;
+            for (const bar of bars) {
+                bar.style.width = widthPx;
+            }
+        });
     });
 }
 
@@ -465,7 +493,6 @@ function renderValues(parent, schema, data, lang) {
     }
 
     parent.appendChild(section);
-    requestAnimationFrame(() => normalizeValueBars(section));
 }
 
 /* ================== LANGUAGE ================== */
@@ -475,51 +502,68 @@ let characterHeaderRU = '';
 let currentLang = getStoredLang();
 
 async function applyLanguageUI() {
+    if (!infoData) return;
     const langCode = currentLang === 'RU' ? 'ru' : 'en';
     await renderInfobox(langCode);
     await renderArticle(langCode);
+    const valuesSection = document.querySelector('#infobox .infobox-section:last-child');
+    if (valuesSection) normalizeValueBars(valuesSection);
     requestAnimationFrame(() => {
         syncCharacterPanelTypographyFromInfobox();
-        requestAnimationFrame(() => syncCharacterPanelTypographyFromInfobox());
     });
 }
 
-(async function initCharacterPage() {
+async function initCharacterPage() {
     try {
         await ensureCharacterData();
-        characterHeader.textContent = currentLang === 'RU' ? characterHeaderRU : characterHeaderEN;
-        langToggle.textContent = currentLang === 'RU' ? 'EN' : 'RU';
+        if (characterHeader) {
+            characterHeader.textContent = currentLang === 'RU' ? characterHeaderRU : characterHeaderEN;
+        }
+        if (langToggle) {
+            langToggle.textContent = currentLang === 'RU' ? 'EN' : 'RU';
+        }
         await applyLanguageUI();
     } catch (err) {
         console.error('Character page load failed:', err);
     }
-})();
+}
 
-langToggle.addEventListener('click', async () => {
-    try {
-        if (currentLang === 'RU') {
-            characterHeader.textContent = characterHeaderEN;
-            langToggle.textContent = 'RU';
-            currentLang = 'EN';
-        } else {
-            characterHeader.textContent = characterHeaderRU;
-            langToggle.textContent = 'EN';
-            currentLang = 'RU';
+if (CharacterPage.autoInit !== false) {
+    initCharacterPage();
+}
+
+if (langToggle && CharacterPage.bindLangToggle !== false) {
+    langToggle.addEventListener('click', async () => {
+        try {
+            if (currentLang === 'RU') {
+                if (characterHeader) characterHeader.textContent = characterHeaderEN;
+                langToggle.textContent = 'RU';
+                currentLang = 'EN';
+            } else {
+                if (characterHeader) characterHeader.textContent = characterHeaderRU;
+                langToggle.textContent = 'EN';
+                currentLang = 'RU';
+            }
+            setStoredLang(currentLang);
+            await applyLanguageUI();
+            if (typeof CharacterPage.onLanguageChange === 'function') {
+                CharacterPage.onLanguageChange(currentLang);
+            }
+        } catch (err) {
+            console.error('Language switch failed:', err);
         }
-        setStoredLang(currentLang);
-        await applyLanguageUI();
-    } catch (err) {
-        console.error('Language switch failed:', err);
-    }
-});
+    });
+}
 
 /* ================== OVERLAY ================== */
-minimizeBtn.addEventListener('click', () => {
-    overlay.classList.add('hidden');
-    restoreBtn.style.display = 'flex';
-});
+if (minimizeBtn && overlay && restoreBtn) {
+    minimizeBtn.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        restoreBtn.style.display = 'flex';
+    });
 
-restoreBtn.addEventListener('click', () => {
-    overlay.classList.remove('hidden');
-    restoreBtn.style.display = 'none';
-});
+    restoreBtn.addEventListener('click', () => {
+        overlay.classList.remove('hidden');
+        restoreBtn.style.display = 'none';
+    });
+}
