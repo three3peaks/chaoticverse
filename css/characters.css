@@ -143,6 +143,156 @@ body.character-page-static-bg #backgroundHeight {
     display: flow-root;
 }
 
+/* --- Листы-заметки в статье (data-side / data-tilt / data-overlap / data-break) --- */
+.note-board {
+    /* flow-root + без width:100%: доска сжимается в свободную колонку рядом с float-инфобоксом,
+       а не сбрасывается под него целиком */
+    display: flow-root;
+    max-width: 100%;
+    margin: 0.5em 0 1.5em;
+    padding: 20px 12px;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.note-row {
+    display: grid;
+    /* Три одинаковые колонки фиксированной ширины — как в первой версии */
+    grid-template-columns: repeat(3, var(--note-col-width, 300px));
+    gap: 14px 10px;
+    align-items: start;
+    justify-content: start;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 0 12px;
+}
+
+.note-row:last-child {
+    margin-bottom: 0;
+}
+
+.note-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: var(--note-col-width, 300px);
+    min-width: var(--note-col-width, 300px);
+    overflow: visible;
+}
+
+.note-slot--left {
+    grid-column: 1;
+    align-items: flex-start;
+}
+
+.note-slot--center {
+    grid-column: 2;
+    align-items: center;
+}
+
+.note-slot--right {
+    grid-column: 3;
+    align-items: flex-end;
+}
+
+.note-sheet-sizer {
+    display: flex;
+    justify-content: center;
+    /* content-box: padding под наклон снаружи, ширина листа не сжимается */
+    box-sizing: content-box;
+    width: var(--note-col-width, 300px);
+    flex-shrink: 0;
+}
+
+.note-sheet-sizer--overlap + .note-sheet-sizer--overlap {
+    margin-top: -28px;
+}
+
+.note-sheet {
+    --note-tilt: 0deg;
+    /* Слабее прозрачности оверлея (0.85): лист плотнее, но фон ещё чуть просвечивает */
+    --note-bg: rgba(0, 0, 0, 0.94);
+    width: var(--note-col-width, 300px);
+    max-width: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background: var(--note-bg);
+    color: #fff;
+    border: 1px solid #fff;
+    box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.35);
+    padding: 10px 12px 14px;
+    font-size: 0.82em;
+    line-height: 1.45;
+    transform: rotate(var(--note-tilt));
+    transform-origin: center center;
+    position: relative;
+    z-index: 1;
+}
+
+.note-sheet[data-overlap="true"] {
+    z-index: 2;
+}
+
+.note-sheet__title {
+    margin: 0;
+    padding: 0 0 8px;
+    text-align: center;
+    font-size: 1.08em;
+    font-weight: bold;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.note-sheet__body {
+    margin: 8px 0 0;
+    text-align: left;
+    color: #fff;
+    overflow: visible;
+    overflow-wrap: break-word;
+}
+
+.fixed-overlay.fixed-overlay--character-panel-themed .note-sheet,
+.fixed-overlay.fixed-overlay--character-panel-themed .note-sheet__title,
+.fixed-overlay.fixed-overlay--character-panel-themed .note-sheet__body {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .note-row {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        justify-items: stretch;
+    }
+
+    .note-slot--left,
+    .note-slot--center,
+    .note-slot--right {
+        grid-column: 1;
+        width: min(var(--note-col-width, 300px), 92%);
+        min-width: 0;
+        max-width: 92%;
+    }
+
+    .note-sheet-sizer,
+    .note-sheet {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .note-slot--left {
+        margin-right: auto;
+    }
+
+    .note-slot--center {
+        margin-inline: auto;
+    }
+
+    .note-slot--right {
+        margin-left: auto;
+    }
+}
+
 /* --- Картинки в тексте статьи --- */
 .text-image {
     height: auto;

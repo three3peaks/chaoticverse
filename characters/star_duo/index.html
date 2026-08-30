@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Star Duo | CHAOTICVERSE</title>
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/characters.css">
+    <link rel="stylesheet" href="../../css/star-duo.css">
+    <link rel="icon" href="../../favicon.png" type="image/x-icon">
+    <link rel="preload" as="image" href="../../images/wallpapers/StarDuoAnime.webp">
+    <link rel="preload" as="image" href="../../images/characters/star_duo/StarDuo.webp">
+    <link rel="preload" as="image" href="../../images/characters/star_duo/StarChara.webp">
+    <link rel="preload" as="image" href="../../images/characters/star_duo/StarSans.webp">
+</head>
+<body class="character-page-static-bg star-duo-page">
+<div class="fixed-overlay" id="overlay">
+    <button class="minimize-button" id="minimize">–</button>
+    <button class="lang-toggle-button" id="langToggle">EN</button>
+
+    <div class="overlay-content-characters-page" id="textContent">
+        <h1 id="characterHeader">Звездный Дуэт</h1>
+
+        <hr class="divider">
+
+        <div class="button-row">
+            <button class="nav-button">
+                <a href=".." class="nav-button">
+                    <img src="../../images/buttons/characters_button.png" alt="Characters">
+                </a>
+            </button>
+        </div>
+
+        <hr class="divider">
+
+        <div class="star-duo-picker" id="starDuoPicker">
+            <p class="star-duo-hint star-duo-hint--red" id="starDuoHint">
+                <span class="star-duo-hint__burst" aria-hidden="true"></span>
+                <span class="star-duo-hint__bolts" aria-hidden="true"></span>
+                <span class="star-duo-hint__text">Выберите персонажа</span>
+            </p>
+            <div class="star-duo-stage" id="starDuoStage">
+                <img
+                    class="star-duo-base"
+                    src="../../images/characters/star_duo/StarDuo.webp"
+                    alt="Star Duo"
+                    decoding="async"
+                    fetchpriority="high"
+                    draggable="false"
+                >
+                <img
+                    class="star-duo-layer star-duo-layer--chara"
+                    src="../../images/characters/star_duo/StarChara.webp"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
+                    draggable="false"
+                >
+                <img
+                    class="star-duo-layer star-duo-layer--sans"
+                    src="../../images/characters/star_duo/StarSans.webp"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
+                    draggable="false"
+                >
+                <div class="star-duo-hover-name" id="starDuoHoverName" aria-hidden="true"></div>
+                <button
+                    type="button"
+                    class="star-duo-hit star-duo-hit--chara"
+                    id="pickChara"
+                    data-character="chara"
+                    aria-label="Star!Chara"
+                ></button>
+                <button
+                    type="button"
+                    class="star-duo-hit star-duo-hit--sans"
+                    id="pickSans"
+                    data-character="sans"
+                    aria-label="Star!Sans"
+                ></button>
+            </div>
+        </div>
+
+        <div class="star-duo-profile" id="starDuoProfile" hidden>
+            <div class="star-duo-back-row">
+                <button type="button" class="star-duo-back" id="backToPicker">Вернуться к выбору</button>
+            </div>
+
+            <div id="infobox" class="infobox"></div>
+            <div class="character-text">
+                <article id="Article"></article>
+            </div>
+        </div>
+
+        <div class="overlay-footer-text">
+            <p style="margin-top: 60px;">© <span id="year"></span> SOLE PRODUCTION UT PROJECT</p>
+        </div>
+    </div>
+</div>
+
+<div class="restore-button" id="restore">+</div>
+<div id="backgroundHeight" style="background-image: url('../../images/wallpapers/StarDuoAnime.webp');"></div>
+
+<script>
+    window.CharacterPage = {
+        autoInit: false,
+        bindLangToggle: true,
+        onLanguageChange: null
+    };
+</script>
+<script src="../../lang-preference.js"></script>
+<script src="../character_scripts.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

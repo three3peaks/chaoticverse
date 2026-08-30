@@ -1,0 +1,50 @@
+{
+  "data": {
+    "ru_name": "Стар!Чара",
+    "en_name": "Star!Chara",
+    "img": "Star Chara.webp",
+    "infobox": {
+      "accent": "#9fd84a",
+      "accent2": "#e84848",
+      "background": "#1a2218",
+      "muted": "#c9a0d4"
+    },
+    "article": {
+      "ru": "article_chara_ru.html",
+      "en": "article_chara_en.html"
+    }
+  },
+  "parameters": {
+    "biography": {
+      "name": {
+        "en": "Star!Chara",
+        "ru": "Стар!Чара"
+      },
+      "real_name": {
+        "en": "Chara",
+        "ru": "Чара"
+      },
+      "birth": "10.11",
+      "sex": "man",
+      "age": "21",
+      "species": "human",
+      "universe": "",
+      "worldview": "CN"
+    },
+    "information": {
+      "cr_data": "26.05.2020"
+    },
+    "values": {
+      "physical_power": 7,
+      "magical_power": 10,
+      "program_power": 0,
+      "physical_stamina": 8,
+      "mental_stamina": 6,
+      "speed": 7,
+      "intelligence": 9,
+      "strategic_vision": 7,
+      "empathy": 6,
+      "mental_stability": 6
+    }
+  }
+}

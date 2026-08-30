@@ -1,0 +1,54 @@
+{
+  "data": {
+    "ru_name": "Стар!Санс",
+    "en_name": "Star!Sans",
+    "img": "Star Sans.webp",
+    "infobox": {
+      "accent": "#c9a0ff",
+      "accent2": "#f4f0fa",
+      "background": "#120a1c",
+      "muted": "#a78bc9"
+    },
+    "article": {
+      "ru": "article_sans_ru.html",
+      "en": "article_sans_en.html"
+    }
+  },
+  "parameters": {
+    "biography": {
+      "name": {
+        "en": "Star",
+        "ru": "Стар"
+      },
+      "real_name": {
+        "en": "Sans",
+        "ru": "Санс"
+      },
+      "birth": "29.10",
+      "sex": "man",
+      "age": "",
+      "species": "monster",
+      "kind": {
+        "en": "Skeleton",
+        "ru": "Скелетоподобный"
+      },
+      "universe": "",
+      "worldview": "CG"
+    },
+    "information": {
+      "cr_data": "26.05.2020"
+    },
+    "values": {
+      "physical_power": 9,
+      "magical_power": 8,
+      "program_power": 0,
+      "physical_stamina": 8,
+      "mental_stamina": 8,
+      "speed": 8,
+      "intelligence": 7,
+      "strategic_vision": 9,
+      "empathy": 9,
+      "mental_stability": 8
+    }
+  }
+}

@@ -333,11 +333,322 @@ function wrapArticleFloatSections(articleEl) {
     }
 }
 
+function isNoteSheetEl(node) {
+    return node && node.nodeType === Node.ELEMENT_NODE && node.classList.contains('note-sheet');
+}
+
+function attrFlag(el, name) {
+    const v = (el.getAttribute(name) || '').trim().toLowerCase();
+    return v === 'true' || v === '1' || v === 'yes';
+}
+
+function noteSheetSide(sheet) {
+    const side = (sheet.getAttribute('data-side') || 'left').trim().toLowerCase();
+    if (side === 'center' || side === 'right') return side;
+    return 'left';
+}
+
+function noteSheetTilt(sheet) {
+    const raw = (sheet.getAttribute('data-tilt') || '0').replace(/deg$/i, '').trim();
+    const n = Number.parseFloat(raw);
+    if (!Number.isFinite(n)) return 0;
+    return Math.max(-90, Math.min(90, n));
+}
+
+function collectNoteSheetGroups(articleEl) {
+    const groups = [];
+    let node = articleEl.firstChild;
+    while (node) {
+        if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) {
+            node = node.nextSibling;
+            continue;
+        }
+        if (!isNoteSheetEl(node)) {
+            node = node.nextSibling;
+            continue;
+        }
+        const group = [];
+        while (node) {
+            if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) {
+                const blank = node;
+                node = node.nextSibling;
+                blank.remove();
+                continue;
+            }
+            if (!isNoteSheetEl(node)) break;
+            group.push(node);
+            node = node.nextSibling;
+        }
+        if (group.length) groups.push(group);
+    }
+    return groups;
+}
+
+function splitNoteSheetRows(sheets) {
+    const rows = [];
+    let row = { left: [], center: [], right: [] };
+    let filled = false;
+    let prevSide = null;
+
+    const flush = () => {
+        if (!filled) return;
+        rows.push(row);
+        row = { left: [], center: [], right: [] };
+        filled = false;
+        prevSide = null;
+    };
+
+    for (const sheet of sheets) {
+        const side = noteSheetSide(sheet);
+        const forceBreak = attrFlag(sheet, 'data-break') || attrFlag(sheet, 'data-new-row');
+        if (forceBreak && filled) flush();
+        if (row[side].length && prevSide !== side) flush();
+        row[side].push(sheet);
+        filled = true;
+        prevSide = side;
+    }
+    flush();
+    return rows;
+}
+
+function noteColumnWidthPx(articleEl) {
+    const w = articleEl?.getBoundingClientRect().width || 900;
+    // Три колонки + зазоры ряда (~10px×2) и горизонтальный padding доски
+    return Math.max(200, Math.floor((w - 44) / 3));
+}
+
+function applyNoteBoardMetrics(board) {
+    const article = board.closest('article') || board.parentElement;
+    const colW = noteColumnWidthPx(article);
+    // Одна ширина на всю статью — все доски и листы совпадают
+    if (article) article.style.setProperty('--note-col-width', `${colW}px`);
+    board.style.setProperty('--note-col-width', `${colW}px`);
+    sizeNoteSizers(board);
+}
+
+function sizeNoteSizers(board) {
+    board.querySelectorAll('.note-sheet-sizer').forEach((sizer) => {
+        const sheet = sizer.querySelector('.note-sheet');
+        if (!sheet) return;
+        const overlap = attrFlag(sheet, 'data-overlap');
+        sizer.style.padding = '';
+        sizer.classList.toggle('note-sheet-sizer--overlap', overlap);
+
+        const tilt = noteSheetTilt(sheet);
+        const w = sheet.offsetWidth;
+        const h = sheet.offsetHeight;
+        if (!w || !h) return;
+        const rad = Math.abs(tilt) * Math.PI / 180;
+        const extraX = Math.abs(h * Math.sin(rad)) / 2;
+        const extraY = Math.abs(w * Math.sin(rad)) / 2;
+        // При наклоне всегда оставляем запас, иначе углы листа обрезаются
+        sizer.style.padding = `${extraY}px ${extraX}px`;
+    });
+}
+
+function mountNoteBoard(sheets) {
+    const board = document.createElement('div');
+    board.className = 'note-board';
+    sheets[0].before(board);
+
+    const rows = splitNoteSheetRows(sheets);
+    rows.forEach((row) => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'note-row';
+        ['left', 'center', 'right'].forEach((side) => {
+            const slot = document.createElement('div');
+            slot.className = `note-slot note-slot--${side}`;
+            row[side].forEach((sheet, i) => {
+                const tilt = noteSheetTilt(sheet);
+                sheet.style.setProperty('--note-tilt', `${tilt}deg`);
+                sheet.style.zIndex = String(i + 1);
+                const sizer = document.createElement('div');
+                sizer.className = 'note-sheet-sizer';
+                sizer.appendChild(sheet);
+                slot.appendChild(sizer);
+            });
+            rowEl.appendChild(slot);
+        });
+        board.appendChild(rowEl);
+    });
+    return board;
+}
+
+function layoutNoteSheets(articleEl) {
+    if (!articleEl) return;
+    const groups = collectNoteSheetGroups(articleEl);
+    const boards = groups.map(mountNoteBoard);
+    requestAnimationFrame(() => {
+        boards.forEach(applyNoteBoardMetrics);
+        requestAnimationFrame(() => boards.forEach(applyNoteBoardMetrics));
+    });
+}
+
+if (!window.__noteSheetResizeBound) {
+    window.__noteSheetResizeBound = true;
+    let noteResizeTimer = 0;
+    window.addEventListener('resize', () => {
+        window.clearTimeout(noteResizeTimer);
+        noteResizeTimer = window.setTimeout(() => {
+            document.querySelectorAll('#Article .note-board').forEach(applyNoteBoardMetrics);
+        }, 80);
+    });
+}
+
+/* --- WD-Gaster: белая цензура + глитч (8–15s скрыто, затем 0.5s вспышка, 1–3 копии) --- */
+const WD_GASTER_FLASH_TOTAL_SEC = 0.5;
+const WD_GASTER_FLASH_EACH_SEC = WD_GASTER_FLASH_TOTAL_SEC / 2;
+
+function buildWdGasterGlitchFrames(fromPct, toPct, rand, base = { x: 0, y: 0 }, opacityScale = 1) {
+    const frames = [];
+    const steps = 7;
+    for (let i = 0; i <= steps; i++) {
+        const pct = fromPct + ((toPct - fromPct) * i) / steps;
+        const x = base.x + Math.round((rand() - 0.5) * 10);
+        const y = base.y + Math.round((rand() - 0.5) * 22);
+        const skew = (rand() - 0.5) * 5;
+        const opacity = (rand() > 0.12 ? 1 : 0.72) * opacityScale;
+        frames.push(
+            `${pct.toFixed(2)}%{opacity:${opacity.toFixed(2)};transform:translate(${x}px,${y}px) skewX(${skew.toFixed(1)}deg);z-index:15;filter:contrast(1.12) saturate(1.25)}`
+        );
+    }
+    return frames.join('\n');
+}
+
+function appendWdGasterLayerCss(css, id, layer, total, p1, p2, rand, base, opacityScale, wingdingsFirst) {
+    const firstOrig = buildWdGasterGlitchFrames(p1 + 0.01, p2 - 0.01, rand, base, opacityScale);
+    const secondOrig = buildWdGasterGlitchFrames(p2, 99.99, rand, base, opacityScale);
+    const firstWd = buildWdGasterGlitchFrames(p1 + 0.01, p2 - 0.01, rand, base, opacityScale);
+    const secondWd = buildWdGasterGlitchFrames(p2, 99.99, rand, base, opacityScale);
+
+    if (wingdingsFirst) {
+        css += `
+@keyframes ${id}-${layer}-before{
+    0%,${p2.toFixed(2)}%{opacity:0;transform:translate(0,0);filter:none}
+    ${secondOrig}
+    100%{opacity:0;transform:translate(0,0);filter:none}
+}
+@keyframes ${id}-${layer}-after{
+    0%,${p1.toFixed(2)}%{opacity:0;transform:translate(0,0);filter:none}
+    ${firstWd}
+    ${p2.toFixed(2)}%,100%{opacity:0;transform:translate(0,0);filter:none}
+}
+.${id}-${layer}::before{animation:${id}-${layer}-before ${total}s steps(1,end) infinite}
+.${id}-${layer}::after{animation:${id}-${layer}-after ${total}s steps(1,end) infinite}
+`;
+    } else {
+        css += `
+@keyframes ${id}-${layer}-before{
+    0%,${p1.toFixed(2)}%{opacity:0;transform:translate(0,0);filter:none}
+    ${firstOrig}
+    ${p2.toFixed(2)}%,100%{opacity:0;transform:translate(0,0);filter:none}
+}
+@keyframes ${id}-${layer}-after{
+    0%,${(p2 - 0.01).toFixed(2)}%{opacity:0;transform:translate(0,0);filter:none}
+    ${secondWd}
+    100%{opacity:0;transform:translate(0,0);filter:none}
+}
+.${id}-${layer}::before{animation:${id}-${layer}-before ${total}s steps(1,end) infinite}
+.${id}-${layer}::after{animation:${id}-${layer}-after ${total}s steps(1,end) infinite}
+`;
+    }
+    return css;
+}
+
+function initWdGasterEffect(articleEl) {
+    if (!articleEl) return;
+
+    let styleEl = document.getElementById('wd-gaster-dynamic');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'wd-gaster-dynamic';
+        document.head.appendChild(styleEl);
+    }
+
+    const spans = articleEl.querySelectorAll('.wd-gaster');
+    if (!spans.length) {
+        styleEl.textContent = '';
+        return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        styleEl.textContent = '';
+        return;
+    }
+
+    let css = '';
+    spans.forEach((el, index) => {
+        [...el.classList].filter((c) => /^wd-g\d/.test(c)).forEach((c) => el.classList.remove(c));
+        el.querySelectorAll('.wd-gaster-echo').forEach((echo) => echo.remove());
+
+        const hide = 8 + Math.random() * 7;
+        const total = hide + WD_GASTER_FLASH_TOTAL_SEC;
+        const p1 = (hide / total) * 100;
+        const p2 = ((hide + WD_GASTER_FLASH_EACH_SEC) / total) * 100;
+        const id = `wd-g${index}`;
+        const copies = 1 + Math.floor(Math.random() * 3);
+        const wingdingsFirst = Math.random() < 0.5;
+
+        el.classList.add(id, `${id}-main`);
+
+        for (let c = 1; c < copies; c++) {
+            const echo = document.createElement('span');
+            echo.className = 'wd-gaster-echo';
+            echo.setAttribute('aria-hidden', 'true');
+            echo.dataset.text = el.dataset.text || '';
+            el.appendChild(echo);
+        }
+
+        css += `
+@keyframes ${id}-bar{
+    0%,${p1.toFixed(2)}%{color:#fff;background-color:#fff}
+    ${(p1 + 0.01).toFixed(2)}%,99.99%{color:transparent;background-color:transparent}
+    100%{color:#fff;background-color:#fff}
+}
+.${id}{animation:${id}-bar ${total}s steps(1,end) infinite}
+`;
+
+        const layers = [{ suffix: 'main', el, base: { x: 0, y: 0 }, opacity: 1 }];
+        el.querySelectorAll('.wd-gaster-echo').forEach((echo, echoIndex) => {
+            const suffix = `echo${echoIndex}`;
+            echo.classList.add(`${id}-${suffix}`);
+            layers.push({
+                suffix,
+                el: echo,
+                base: {
+                    x: Math.round((Math.random() - 0.5) * 18),
+                    y: Math.round((Math.random() - 0.5) * 20)
+                },
+                opacity: 0.55 + Math.random() * 0.3
+            });
+        });
+
+        layers.forEach((layer) => {
+            css = appendWdGasterLayerCss(
+                css,
+                id,
+                layer.suffix,
+                total,
+                p1,
+                p2,
+                () => Math.random(),
+                layer.base,
+                layer.opacity,
+                wingdingsFirst
+            );
+        });
+    });
+
+    styleEl.textContent = css;
+}
+
 async function renderArticle(lang = 'ru') {
     await ensureCharacterData();
     const article = document.getElementById('Article');
     article.innerHTML = characterArticle[lang] || '';
     wrapArticleFloatSections(article);
+    layoutNoteSheets(article);
+    initWdGasterEffect(article);
 }
 
 /* ================== NORMALIZATION ================== */

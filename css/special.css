@@ -451,3 +451,118 @@
         opacity: 0;
     }
 }
+
+/**
+ * WD-GASTER — имя залито белой «цензурой»; раз в 8–15s (случайно, через JS)
+ * вспыхивает оригинал и сразу Wingdings «☝︎✌︎💧︎❄︎☜︎☼︎» (суммарно ~0.5s, 1–3 копии).
+ *
+ * Пример:
+ * <span class="wd-gaster" data-text="Гастер">Гастер</span>
+ * <span class="wd-gaster" data-text="Gaster">Gaster</span>
+ */
+.wd-gaster {
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    background-color: #fff;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 0 0.06em;
+    line-height: inherit;
+    vertical-align: baseline;
+    overflow: visible;
+    isolation: isolate;
+    max-width: 100%;
+}
+
+.wd-gaster::before,
+.wd-gaster::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 15;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: visible;
+    color: #fff;
+    text-shadow:
+        0.06em 0 0 rgba(0, 190, 255, 0.85),
+        -0.06em 0 0 rgba(255, 55, 55, 0.8),
+        0.02em 0.04em 0 rgba(0, 140, 255, 0.45),
+        -0.02em -0.05em 0 rgba(255, 0, 80, 0.4);
+}
+
+.wd-gaster::before {
+    content: attr(data-text);
+}
+
+.wd-gaster::after {
+    content: "☝︎✌︎💧︎❄︎☜︎☼︎";
+    letter-spacing: 0.02em;
+    text-shadow:
+        0.1em 0 0 rgba(0, 200, 255, 0.95),
+        -0.1em 0 0 rgba(255, 0, 60, 0.9),
+        0 0 0.35em rgba(255, 255, 255, 0.35);
+}
+
+/* Эхо-копии текста (1–3 шт., создаются в JS) */
+.wd-gaster-echo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.wd-gaster-echo::before,
+.wd-gaster-echo::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 14;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: visible;
+    color: #fff;
+    text-shadow:
+        0.06em 0 0 rgba(0, 190, 255, 0.7),
+        -0.06em 0 0 rgba(255, 55, 55, 0.65),
+        0.02em 0.04em 0 rgba(0, 140, 255, 0.35),
+        -0.02em -0.05em 0 rgba(255, 0, 80, 0.3);
+}
+
+.wd-gaster-echo::before {
+    content: attr(data-text);
+}
+
+.wd-gaster-echo::after {
+    content: "☝︎✌︎💧︎❄︎☜︎☼︎";
+    letter-spacing: 0.02em;
+    text-shadow:
+        0.1em 0 0 rgba(0, 200, 255, 0.75),
+        -0.1em 0 0 rgba(255, 0, 60, 0.7),
+        0 0 0.35em rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wd-gaster::before,
+    .wd-gaster::after {
+        animation: none !important;
+        opacity: 0;
+    }
+
+    .wd-gaster-echo {
+        display: none;
+    }
+
+    .wd-gaster {
+        animation: none !important;
+        color: #fff;
+        background-color: #fff;
+    }
+}
+
