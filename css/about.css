@@ -2,14 +2,14 @@
 
 .about-us-image {
     display: block;
-    max-width: 60%;
+    max-width: 35%;
     height: auto;
     margin: 5px auto auto auto;
 }
 
 @media (max-width: 900px) {
     .about-us-image {
-        max-width: 90%;
+        max-width: 55%;
     }
 }
 
