@@ -2,6 +2,69 @@
   "$schema": "./people-role.schema.json",
   "people": [
     {
+      "id": "asun",
+      "type": "all",
+      "image": "A-Sun.webp",
+      "alt": "a-sun",
+      "link": "https://vk.com/a_sun_comix",
+      "en": {
+        "name": "A-Sun"
+      },
+      "ru": {
+        "name": "A-Sun"
+      }
+    },
+    {
+      "id": "sorenpo",
+      "type": "orig",
+      "image": "Sorenpo.webp",
+      "alt": "sorenpo",
+      "link": "https://vk.com/soren_po",
+      "en": {
+        "name": "Sorenpo"
+      },
+      "ru": {
+        "name": "Sorenpo"
+      }
+    },
+    {
+      "id": "husky",
+      "type": "orig",
+      "image": "hell_husky.webp",
+      "alt": "husky",
+      "link": "https://vk.com/6husky6hell6",
+      "en": {
+        "name": "^°•°•Hell~Husky•°•°^"
+      },
+      "ru": {
+        "name": "^°•°•Hell~Husky•°•°^"
+      }
+    },
+    {
+      "id": "roman",
+      "image": "roman holmes.webp",
+      "alt": "roman",
+      "link": "https://vk.com/timelessangel",
+      "en": {
+        "name": "Roman Holmes"
+      },
+      "ru": {
+        "name": "Roman Holmes"
+      }
+    },
+    {
+      "id": "musicavocado",
+      "image": "music_avo.webp",
+      "alt": "musicavocado",
+      "link": "https://www.youtube.com/@musicavocado2325",
+      "en": {
+        "name": "MusicAvocado"
+      },
+      "ru": {
+        "name": "MusicAvocado"
+      }
+    },
+    {
       "id": "tok",
       "image": "tok.webp",
       "alt": "tok",
@@ -35,18 +98,6 @@
       },
       "ru": {
         "name": "Шкатулка Цуно Айрэйт"
-      }
-    },
-    {
-      "id": "ti_sparrow",
-      "image": "ti_sparrow.webp",
-      "alt": "ti_sparrow",
-      "link": "https://vk.com/ti_sparrow",
-      "en": {
-        "name": "~^ti_sparrow^~"
-      },
-      "ru": {
-        "name": "~^ti_sparrow^~"
       }
     },
     {

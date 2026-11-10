@@ -14,18 +14,6 @@
       }
     },
     {
-      "id": "roman",
-      "image": "roman holmes.webp",
-      "alt": "roman",
-      "link": "https://vk.com/timelessangel",
-      "en": {
-        "name": "Roman Holmes"
-      },
-      "ru": {
-        "name": "Roman Holmes"
-      }
-    },
-    {
       "id": "redark",
       "image": "re dark.webp",
       "alt": "redark",
@@ -38,6 +26,18 @@
       }
     },
     {
+      "id": "ti_sparrow",
+      "image": "ti_sparrow.webp",
+      "alt": "ti_sparrow",
+      "link": "https://vk.com/ti_sparrow",
+      "en": {
+        "name": "~^ti_sparrow^~"
+      },
+      "ru": {
+        "name": "~^ti_sparrow^~"
+      }
+    },
+    {
       "id": "dolphin",
       "image": "dolphin cult.webp",
       "alt": "dolphin",
@@ -47,18 +47,6 @@
       },
       "ru": {
         "name": "Культ Дельфина"
-      }
-    },
-    {
-      "id": "musicavocado",
-      "image": "music_avo.webp",
-      "alt": "musicavocado",
-      "link": "https://www.youtube.com/@musicavocado2325",
-      "en": {
-        "name": "MusicAvocado"
-      },
-      "ru": {
-        "name": "MusicAvocado"
       }
     }
   ]

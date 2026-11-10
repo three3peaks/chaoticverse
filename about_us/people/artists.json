@@ -2,19 +2,6 @@
   "$schema": "./people-role.schema.json",
   "people": [
     {
-      "id": "asun",
-      "type": "all",
-      "image": "A-Sun.webp",
-      "alt": "a-sun",
-      "link": "https://vk.com/a_sun_comix",
-      "en": {
-        "name": "A-Sun"
-      },
-      "ru": {
-        "name": "A-Sun"
-      }
-    },
-    {
       "id": "paws",
       "type": "all",
       "image": "paws.webp",
@@ -25,19 +12,6 @@
       },
       "ru": {
         "name": "Могучие лапки"
-      }
-    },
-    {
-      "id": "sorenpo",
-      "type": "orig",
-      "image": "Sorenpo.webp",
-      "alt": "sorenpo",
-      "link": "https://vk.com/soren_po",
-      "en": {
-        "name": "Sorenpo"
-      },
-      "ru": {
-        "name": "Sorenpo"
       }
     },
     {
@@ -116,19 +90,6 @@
       },
       "ru": {
         "name": "ANTI"
-      }
-    },
-    {
-      "id": "husky",
-      "type": "orig",
-      "image": "hell_husky.webp",
-      "alt": "husky",
-      "link": "https://vk.com/6husky6hell6",
-      "en": {
-        "name": "^°•°•Hell~Husky•°•°^"
-      },
-      "ru": {
-        "name": "^°•°•Hell~Husky•°•°^"
       }
     },
     {
